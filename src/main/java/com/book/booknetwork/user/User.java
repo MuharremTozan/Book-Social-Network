@@ -1,5 +1,7 @@
 package com.book.booknetwork.user;
 
+import com.book.booknetwork.book.Book;
+import com.book.booknetwork.history.BookTransactionHistory;
 import com.book.booknetwork.role.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -41,6 +43,12 @@ public class User implements UserDetails, Principal {
     private boolean accountLocked;
     private boolean enabled;
 
+    @OneToMany(mappedBy = "owner")
+    private List<Book> books;
+
+    @OneToMany(mappedBy = "user")
+    private List<BookTransactionHistory> histories;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Role> roles;
@@ -79,7 +87,7 @@ public class User implements UserDetails, Principal {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
